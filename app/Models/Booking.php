@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Booking extends Model
 {
@@ -19,4 +20,12 @@ class Booking extends Model
         'total_price',
         'status',
     ];
+
+    /**
+     * Relasi ke TourPackage (Setiap booking memiliki satu paket tur)
+     */
+    public function tourPackage(): BelongsTo
+    {
+        return $this->belongsTo(TourPackage::class);
+    }
 }

@@ -37,6 +37,10 @@ new class extends Component
                     <x-nav-link :href="route('tour-packages.index')" :active="request()->routeIs('tour-packages.index')">
                         {{ __('Tour Packages') }}
                     </x-nav-link>
+
+                    <x-nav-link :href="route('bookings.index')" :active="request()->routeIs('bookings.*')">
+                        {{ __('Bookings') }}
+                    </x-nav-link>
                 </div>
             </div>
 

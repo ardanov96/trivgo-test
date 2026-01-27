@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TourPackageController;
+use App\Http\Controllers\BookingController;
 
 Route::view('/', 'welcome');
 
@@ -14,5 +15,7 @@ Route::view('profile', 'profile')
     ->name('profile');
 
 Route::resource('tour-packages', TourPackageController::class)->middleware(['auth']);
+
+Route::resource('bookings', BookingController::class)->middleware(['auth']);
 
 require __DIR__.'/auth.php';
