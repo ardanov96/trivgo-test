@@ -5,6 +5,9 @@ use App\Http\Controllers\TourPackageController;
 use App\Http\Controllers\BookingController;
 
 Route::view('/', 'welcome');
+Route::resource('packages', TourPackageController::class)
+    ->parameters(['packages' => 'tour_package']) 
+    ->middleware(['auth']);
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
