@@ -28,4 +28,5 @@ class Booking extends Model
     {
         return $this->belongsTo(TourPackage::class);
     }
+    
 }
