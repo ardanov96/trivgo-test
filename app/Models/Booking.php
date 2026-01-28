@@ -24,9 +24,12 @@ class Booking extends Model
     /**
      * Relasi ke TourPackage (Setiap booking memiliki satu paket tur)
      */
-    public function tourPackage(): BelongsTo
+    public function tourPackage()
     {
-        return $this->belongsTo(TourPackage::class);
+        return $this->belongsTo(TourPackage::class)->withDefault([
+            'name' => 'N/A' // Nama default jika data paket tidak ditemukan
+        ]);
     }
+    
     
 }

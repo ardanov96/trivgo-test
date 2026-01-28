@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\TourPackage;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTourPackageRequest;
+use App\Http\Requests\UpdateTourPackageRequest;
+use Illuminate\Http\RedirectResponse; 
+use Illuminate\View\View;
 
 class TourPackageController extends Controller
 {
@@ -32,21 +35,13 @@ class TourPackageController extends Controller
         return view('tour-packages.edit', compact('tour_package'));
     }
 
-    public function update(Request $request, TourPackage $tour_package)
+    public function update(UpdateTourPackageRequest $request, TourPackage $tour_package): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'destination' => 'required|string|max:255',
-            'price' => 'required|numeric|min:1',
-            'duration_days' => 'required|integer|min:1',
-            'max_participants' => 'required|integer|min:1',
-            'description' => 'nullable|string',
-            'is_active' => 'required|boolean',
-        ]);
+        // Validasi sudah ditangani oleh UpdateTourPackageRequest
+        $tour_package->update($request->validated());
 
-        $tour_package->update($validated);
-
-        return redirect()->route('tour-packages.index')->with('success', 'Package updated successfully!');
+        return redirect()->route('tour-packages.index')
+            ->with('success', 'Package updated successfully!');
     }
 
     public function destroy(TourPackage $tour_package)

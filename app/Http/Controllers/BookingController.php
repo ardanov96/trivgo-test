@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreBookingRequest; 
+use App\Http\Requests\UpdateBookingRequest;
 use App\Models\Booking; 
 use App\Models\TourPackage;
+use Illuminate\Http\RedirectResponse; 
+use Illuminate\View\View;
 
 class BookingController extends Controller
 {
@@ -18,27 +22,17 @@ class BookingController extends Controller
         return view('bookings.create', compact('packages'));
     }
 
-    public function store(Request $request) {
-        $package = TourPackage::findOrFail($request->tour_package_id);
+    public function store(StoreBookingRequest $request): RedirectResponse
+    {
+        $validated = $request->validated();
         
-        $validated = $request->validate([
-            'tour_package_id'        => 'required|exists:tour_packages,id',
-            'customer_name'          => 'required|string|max:255',
-            'customer_email'         => 'required|email',
-            'customer_phone'         => 'required|string|max:20',
-            'number_of_participants' => 'required|integer|min:1', 
-            'booking_date'           => 'required|date|after_or_equal:today',
-        ]);
-
-        // Ambil data paket untuk menghitung harga
-        $package = TourPackage::findOrFail($request->tour_package_id);
-
-        // Hitung total harga otomatis menggunakan field yang benar
-        $validated['total_price'] = $package->price * $request->number_of_participants;
+        $package = TourPackage::findOrFail($validated['tour_package_id']);
+        $validated['total_price'] = $package->price * $validated['number_of_participants'];
         $validated['status'] = 'pending';
 
         Booking::create($validated);
-        return redirect()->route('bookings.index')->with('success', 'Booking created!');
+
+        return redirect()->route('bookings.index')->with('success', 'Booking created successfully!');
     }
 
     public function edit(Booking $booking)
@@ -47,20 +41,13 @@ class BookingController extends Controller
         return view('bookings.edit', compact('booking', 'packages'));
     }
 
-    public function update(Request $request, Booking $booking)
+    public function update(UpdateBookingRequest $request, Booking $booking): RedirectResponse
     {
-        $validated = $request->validate([
-            'tour_package_id'        => 'required|exists:tour_packages,id',
-            'customer_name'          => 'required|string|max:255',
-            'customer_email'         => 'required|email',
-            'customer_phone'         => 'required|string|max:20',
-            'number_of_participants' => 'required|integer|min:1', 
-            'booking_date'           => 'required|date|after_or_equal:today',
-            'status'                 => 'required|in:pending,confirmed,cancelled',
-        ]);
+        $validated = $request->validated();
 
-        $package = TourPackage::findOrFail($request->tour_package_id);
-        $validated['total_price'] = $package->price * $request->number_of_participants;
+        // Hitung ulang total harga jika paket atau jumlah peserta berubah
+        $package = TourPackage::find($validated['tour_package_id']);
+        $validated['total_price'] = $package->price * $validated['number_of_participants'];
 
         $booking->update($validated);
 

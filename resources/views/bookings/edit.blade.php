@@ -44,6 +44,11 @@
                         </div>
 
                         <div>
+                            <x-input-label for="customer_phone" :value="__('Customer Phone')" />
+                            <x-text-input id="customer_phone" name="customer_phone" type="text" class="mt-1 block w-full" :value="old('customer_phone', $booking->customer_phone)" required />
+                        </div>
+
+                        <div>
                             <x-input-label for="number_of_participants" :value="__('Number of Participants')" />
                             <x-text-input id="number_of_participants" name="number_of_participants" type="number" class="mt-1 block w-full" :value="old('number_of_participants', $booking->number_of_participants)" min="1" required />
                         </div>

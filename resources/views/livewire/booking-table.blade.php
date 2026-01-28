@@ -8,6 +8,12 @@
                 class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             />
         </div>
+        <select wire:model.live="filterStatus" class="w-full md:w-48 rounded-md border-gray-300 shadow-sm">
+            <option value="">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="cancelled">Cancelled</option>
+        </select>
     </div>
 
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 text-gray-900">
